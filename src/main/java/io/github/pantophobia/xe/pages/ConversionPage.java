@@ -2,6 +2,7 @@ package io.github.pantophobia.xe.pages;
 
 import io.github.pantophobia.xe.enums.Currency;
 import lombok.Getter;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -35,12 +36,18 @@ public class ConversionPage {
     @FindBy(css = ".converterresult-fromAmount")
     private WebElement conversionAmount;
 
+    @FindBy(css = ".converterresult-fromCurrency")
+    private WebElement conversionResultFromCurrency;
+
+    @FindBy(css = ".converterresult-toCurrency")
+    private WebElement conversionResultToCurrency;
+
     public void selectFromCurrency(Currency currency) {
-        fromCurrency.sendKeys(currency.name());
+        fromCurrency.sendKeys(currency.name(), Keys.ENTER);
     }
 
     public void selectToCurrency(Currency currency) {
-        toCurrency.sendKeys(currency.name());
+        toCurrency.sendKeys(currency.name(), Keys.ENTER);
     }
 
     public void enterAmount(BigDecimal amount) {
@@ -65,6 +72,14 @@ public class ConversionPage {
 
     public BigDecimal getToCurrencyConversionRate() {
         return new BigDecimal(extractConversionValue(conversionRates.get(1).getText()));
+    }
+
+    public Currency getFromCurrencyAfterConversion() {
+        return Currency.valueOf(conversionResultFromCurrency.getText());
+    }
+
+    public Currency getToCurrencyAfterConversion() {
+        return Currency.valueOf(conversionResultToCurrency.getText());
     }
 
     private String extractConversionValue(String conversionText) {

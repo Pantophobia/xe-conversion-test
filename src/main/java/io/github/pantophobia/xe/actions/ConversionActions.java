@@ -5,8 +5,11 @@ import io.github.pantophobia.xe.helpers.PresenceUtils;
 import io.github.pantophobia.xe.pages.ConversionPage;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Log4j
 @AllArgsConstructor
@@ -23,17 +26,24 @@ public class ConversionActions {
     }
 
     public void verifyResult(BigDecimal valueOfConversion) {
-        log.info(String.format("RESULT: %s", conversionPage.getConversionResult()));
+        BigDecimal conversionRate = conversionPage.getToCurrencyConversionRate();
 
-//        conversionPage.getFromCurrencyConversionRate();
+        MathContext mc = new MathContext(6, RoundingMode.DOWN);
+        BigDecimal expectedResult = conversionRate.multiply(valueOfConversion, mc);
+        BigDecimal actualResult = conversionPage.getConversionResult();
 
+        log.info(String.format("EXPECTED RESULT: %s", expectedResult));
+        log.info(String.format("ACTUAL RESULT: %s", actualResult));
+
+        Assert.assertEquals(expectedResult, actualResult);
     }
 
-    public void verifyCorrectConversion(Currency toCurrency, Currency fromCurrency) {
-        log.info(String.format("RESULT: %s", conversionPage.getConversionResult()));
-//        conversionPage.getConversionResult();
-//        conversionPage.getFromCurrencyConversionRate();
-
+    public void verifyCorrectConversion(Currency fromCurrency, Currency toCurrency) {
+        String currencyError = "CURRENCY NOT CORRECT, EXPECTED %s, BUT FOUND %s";
+        Assert.assertEquals("TO " + String.format(currencyError, toCurrency, conversionPage.getToCurrencyAfterConversion()),
+                toCurrency, conversionPage.getToCurrencyAfterConversion());
+        Assert.assertEquals("FROM " + String.format(currencyError, fromCurrency, conversionPage.getFromCurrencyAfterConversion()),
+                fromCurrency, conversionPage.getFromCurrencyAfterConversion());
     }
 
     public void handleCookiePopup() {

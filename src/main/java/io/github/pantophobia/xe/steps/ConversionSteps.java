@@ -47,13 +47,13 @@ public class ConversionSteps {
         this.scenarioData.setAmountToConvert(amount);
         this.scenarioData.setToCurrency(toCurrency);
         this.scenarioData.setFromCurrency(fromCurrency);
-        conversionActions.convertCurrency(amount, fromCurrency, toCurrency);
+        this.conversionActions.convertCurrency(amount, fromCurrency, toCurrency);
     }
 
     @Then("the result is correct")
     public void verifyValue() {
-//        conversionActions.verifyResult();
-//        conversionActions.verifyResult();
+        conversionActions.verifyCorrectConversion(scenarioData.getFromCurrency(), scenarioData.getToCurrency());
+        conversionActions.verifyResult(scenarioData.getAmountToConvert());
     }
 
 
