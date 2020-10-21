@@ -26,20 +26,26 @@ public class ConversionActions {
     }
 
     public void verifyResult(BigDecimal valueOfConversion) {
+        handlePopUp();
         BigDecimal conversionRate = conversionPage.getToCurrencyConversionRate();
 
-        MathContext mc = new MathContext(6, RoundingMode.DOWN);
+        MathContext mc = new MathContext(6, RoundingMode.UP);
         BigDecimal expectedResult = conversionRate.multiply(valueOfConversion, mc);
         BigDecimal actualResult = conversionPage.getConversionResult();
 
         log.info(String.format("EXPECTED RESULT: %s", expectedResult));
         log.info(String.format("ACTUAL RESULT: %s", actualResult));
 
-        Assert.assertEquals(expectedResult, actualResult);
+        BigDecimal diff = expectedResult.subtract(actualResult).abs();
+
+        boolean withAcceptableBounds = diff.compareTo(BigDecimal.ZERO) == 0 || diff.compareTo(new BigDecimal("0.00001")) == 0;
+
+        Assert.assertTrue(withAcceptableBounds);
     }
 
     public void verifyCorrectConversion(Currency fromCurrency, Currency toCurrency) {
         String currencyError = "CURRENCY NOT CORRECT, EXPECTED %s, BUT FOUND %s";
+        handlePopUp();
         Assert.assertEquals("TO " + String.format(currencyError, toCurrency, conversionPage.getToCurrencyAfterConversion()),
                 toCurrency, conversionPage.getToCurrencyAfterConversion());
         Assert.assertEquals("FROM " + String.format(currencyError, fromCurrency, conversionPage.getFromCurrencyAfterConversion()),
@@ -50,5 +56,13 @@ public class ConversionActions {
         if (PresenceUtils.isPresent(conversionPage.getAcceptCookiesButton()))
             conversionPage.acceptCookies();
     }
+
+    public void handlePopUp() {
+        if(PresenceUtils.isPresent(conversionPage.getPopupCloseButton())) {
+            conversionPage.getPopupCloseButton().click();
+        }
+    }
+
+
 
 }
