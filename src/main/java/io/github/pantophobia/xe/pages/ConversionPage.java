@@ -30,17 +30,21 @@ public class ConversionPage {
     @FindBy(css = ".privacy-basic-button-submit")
     private WebElement acceptCookiesButton;
 
-    @FindBy(css = ".converterresult-unitConversion")
+    @FindBy(css = ".second div")
     private List<WebElement> conversionRates;
 
     @FindBy(css = ".converterresult-fromAmount")
     private WebElement conversionAmount;
 
-    @FindBy(css = ".converterresult-fromCurrency")
+    @FindBy(css = ".converterresult-conversionFrom")
     private WebElement conversionResultFromCurrency;
 
     @FindBy(css = ".converterresult-toCurrency")
     private WebElement conversionResultToCurrency;
+
+    @Getter
+    @FindBy(xpath = ".//button[contains(@id, 'yie-close-button')]")
+    private WebElement popupCloseButton;
 
     public void selectFromCurrency(Currency currency) {
         fromCurrency.sendKeys(currency.name(), Keys.ENTER);
@@ -75,7 +79,9 @@ public class ConversionPage {
     }
 
     public Currency getFromCurrencyAfterConversion() {
-        return Currency.valueOf(conversionResultFromCurrency.getText());
+        String fromCurrency = conversionResultFromCurrency.getText().split(" ")[0];
+        fromCurrency = fromCurrency.substring(fromCurrency.length()-3);
+        return Currency.valueOf(fromCurrency);
     }
 
     public Currency getToCurrencyAfterConversion() {
