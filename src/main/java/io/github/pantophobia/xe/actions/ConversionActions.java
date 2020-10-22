@@ -4,14 +4,14 @@ import io.github.pantophobia.xe.enums.Currency;
 import io.github.pantophobia.xe.helpers.PresenceUtils;
 import io.github.pantophobia.xe.pages.ConversionPage;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-@Log4j
+@Log4j2
 @AllArgsConstructor
 public class ConversionActions {
 
@@ -62,7 +62,4 @@ public class ConversionActions {
             conversionPage.getPopupCloseButton().click();
         }
     }
-
-
-
 }

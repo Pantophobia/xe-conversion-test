@@ -10,7 +10,6 @@ import io.github.pantophobia.xe.actions.ConversionActions;
 import io.github.pantophobia.xe.enums.Currency;
 import io.github.pantophobia.xe.helpers.ScenarioData;
 import io.github.pantophobia.xe.pages.ConversionPage;
-import org.apache.log4j.BasicConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -28,7 +27,6 @@ public class ConversionSteps {
 
     @Before
     public void setup() {
-        BasicConfigurator.configure(); // Setting up Log4j
         WebDriverManager.chromedriver().browserVersion("latest").setup();
         this.webDriver = new ChromeDriver();
         this.webDriver.manage().window().maximize();
